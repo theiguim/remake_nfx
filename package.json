@@ -1,0 +1,33 @@
+{
+  "name": "onebitflix",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@adminjs/design-system": "^4.1.1",
+    "@adminjs/express": "^6.1.0",
+    "@adminjs/prisma": "^5.0.3",
+    "@adminjs/upload": "^4.0.2",
+    "@prisma/client": "^5.22.0",
+    "adminjs": "^7.8.13",
+    "express": "^4.21.1",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.18.1",
+    "pg": "^8.13.1",
+    "prisma": "^5.22.0",
+    "styled-components": "^6.1.13"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
