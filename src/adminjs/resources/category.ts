@@ -5,5 +5,5 @@ export const categoryResourceOptions : ResourceOptions = {
     editProperties: ['name', 'position'],
     filterProperties: ['name', 'position', 'createdAt', 'updatedAt'],
     listProperties: ['id', 'name', 'position'],
-    showProperties: ['name', 'position', 'createdAt', 'updatedAt']
+    showProperties: ['name', 'position', 'createdAt', 'updatedAt'],
 }

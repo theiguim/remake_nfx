@@ -4,7 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "seeders": "tsx watch src/database/seeders/seed-categories-table.ts",
+    "teste": "tsx watch ./teste.ts"
   },
   "keywords": [],
   "author": "",

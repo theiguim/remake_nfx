@@ -1,11 +1,13 @@
 import AdminJS from "adminjs"
 import AdminJsExpress from "@adminjs/express"
-
 //@ts-ignore
 import { Database, Resource, getModelByName } from '@adminjs/prisma'
 import { prisma } from "../database";
 import { categoryResourceOptions } from "./resources/category";
-import { courseResourceOptions } from "./resources/course";
+import { courseResourceFeature, courseResourceOptions } from "./resources/course";
+import { episodeResourceFeatures, episodeResourceOptions, componentLoader } from "./resources/episodes";
+
+
 
 AdminJS.registerAdapter({ Database, Resource })
 
@@ -13,13 +15,20 @@ export const adminJs = new AdminJS({
     resources: [
         {
             resource: { model: getModelByName("Categories"), client: prisma },
-            options: {categoryResourceOptions}
+            // options: categoryResourceOptions
         },
         {
-            resource: {model: getModelByName("Courses"), client: prisma},
-            options: {courseResourceOptions}
+            resource: { model: getModelByName("Courses"), client: prisma },
+            // options: categoryResourceOptions,
+            features: courseResourceFeature
+        },
+        {
+            resource: { model: getModelByName("Episodes"), client: prisma },
+            // options: episodeResourceOptions,
+            features: episodeResourceFeatures
         }
     ],
+    componentLoader,
     rootPath: "/admin",
     branding: {
         companyName: 'OneBitFlix',
@@ -45,5 +54,8 @@ export const adminJs = new AdminJS({
 })
 
 
-
 export const adminJrRouter = AdminJsExpress.buildRouter(adminJs);
+
+
+
+

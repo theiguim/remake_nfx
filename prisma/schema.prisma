@@ -14,22 +14,36 @@ datasource db {
 }
 
 model Categories {
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(255)
-  position Int 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  courses Courses[]
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  position  Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  courses   Courses[]
 }
 
 model Courses {
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(255)
-  synopsis String
-  thumbnailUrl String 
-  featured Boolean @db.Boolean
-  categoryId Int
-  category Categories @relation(fields: [categoryId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(255)
+  synopsis     String
+  thumbnailUrl String?
+  featured     Boolean    @default(false) @db.Boolean
+  categoryId   Int
+  category     Categories @relation(fields: [categoryId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  episodes     Episodes[]
+}
+
+model Episodes {
+  id          Int      @id @default(autoincrement())
+  name        String
+  synopsis    String
+  order       Int
+  videoUrl    String?
+  secondsLong Int?
+  courseId    Int
+  courses     Courses  @relation(fields: [courseId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
