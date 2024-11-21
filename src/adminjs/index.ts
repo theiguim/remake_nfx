@@ -6,8 +6,8 @@ import { prisma } from "../database";
 import { categoryResourceOptions } from "./resources/category";
 import { courseResourceFeature, courseResourceOptions } from "./resources/course";
 import { episodeResourceFeatures, episodeResourceOptions, componentLoader } from "./resources/episodes";
-
-
+import { userResourceOptions } from "./resources/user";
+import bcrypt from "bcrypt"
 
 AdminJS.registerAdapter({ Database, Resource })
 
@@ -26,6 +26,10 @@ export const adminJs = new AdminJS({
             resource: { model: getModelByName("Episodes"), client: prisma },
             // options: episodeResourceOptions,
             features: episodeResourceFeatures
+        },
+        {
+            resource: {model: getModelByName("Users"), client: prisma},
+            options: userResourceOptions
         }
     ],
     componentLoader,
@@ -53,8 +57,25 @@ export const adminJs = new AdminJS({
     }
 })
 
+export const adminJrRouter = AdminJsExpress.buildAuthenticatedRouter(adminJs,{
+    authenticate: async (email, password)=>{
+     const user = await prisma.users.findUnique({where: {email}})
+        
+        if(user && user.role === "admin"){
+            const matched = await bcrypt.compare(password, user.password)
 
-export const adminJrRouter = AdminJsExpress.buildRouter(adminJs);
+            if(matched) return user
+        }
+        return false
+    },
+    cookiePassword: "senha-do-cookie"
+}, null, {
+    resave: false,
+    saveUninitialized: false
+});
+
+
+// export const adminJrRouter = AdminJsExpress.buildRouter(adminJs)
 
 
 
