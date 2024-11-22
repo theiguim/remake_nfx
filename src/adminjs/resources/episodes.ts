@@ -1,12 +1,11 @@
 import { Episodes } from "@prisma/client";
-import { ComponentLoader, FeatureType, ResourceOptions } from "adminjs";
+import {FeatureType, ResourceOptions } from "adminjs";
 //@ts-ignore
 import uploadFeature from "@adminjs/upload";
 import path from "path";
 import { fileURLToPath } from "url";
 import { prisma } from "../../database";
-
-export const componentLoader = new ComponentLoader
+import { componentLoader } from "../components/componentLoader"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,15 +14,15 @@ export const episodeResourceOptions: ResourceOptions = {
     actions: {
         list: {
             before: async (request, context) => {
-    
+
                 const courses = await prisma.courses.findMany({
                     include: {
                         category: true, // Inclui a relação
                     },
-                    
+
                 });
                 console.log(courses)
-    
+
                 return {
                     ...request,
                     records: courses.map((course) => ({
