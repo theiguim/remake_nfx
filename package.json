@@ -19,16 +19,20 @@
     "@adminjs/upload": "^4.0.2",
     "@prisma/client": "^5.22.0",
     "adminjs": "^7.8.13",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "express-formidable": "^1.2.0",
     "express-session": "^1.18.1",
+    "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.1",
     "prisma": "^5.22.0",
-    "styled-components": "^6.1.13"
+    "styled-components": "^6.1.13",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.9.0",
     "bcrypt": "^5.1.1",
     "tsx": "^4.19.2",
