@@ -38,31 +38,35 @@ model Courses {
 }
 
 model Episodes {
-  id          Int      @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   name        String
   synopsis    String
   order       Int
   videoUrl    String?
   secondsLong Int?
   courseId    Int
-  courses     Courses  @relation(fields: [courseId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  courses     Courses      @relation(fields: [courseId], references: [id])
+  watchtimes  WatchTimes[]
+  users       Users[]      @relation("UserEpisode")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 model Users {
-  id        Int         @id @default(autoincrement())
-  firstName String      @db.VarChar(255)
-  lastName  String      @db.VarChar(255)
-  phone     String      @db.VarChar(20)
-  birth     String
-  email     String      @unique @db.VarChar(200)
-  password  String      @db.VarChar(250)
-  role      Role        @default(user)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  Favorites Favorites[]
-  likes     Likes[]
+  id         Int          @id @default(autoincrement())
+  firstName  String       @db.VarChar(255)
+  lastName   String       @db.VarChar(255)
+  phone      String       @db.VarChar(20)
+  birth      String
+  email      String       @unique @db.VarChar(200)
+  password   String       @db.VarChar(250)
+  role       Role         @default(user)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Favorites  Favorites[]
+  likes      Likes[]
+  watchtimes WatchTimes[]
+  episodes   Episodes[]   @relation("UserEpisode")
 }
 
 enum Role {
@@ -89,4 +93,17 @@ model Likes {
   course   Courses @relation(fields: [courseId], references: [id])
 
   @@id([userId, courseId])
+}
+
+model WatchTimes {
+  seconds   Int
+  userId    Int
+  episodeId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    Users    @relation(fields: [userId], references: [id])
+  episode Episodes @relation(fields: [episodeId], references: [id])
+
+  @@id([userId, episodeId])
 }

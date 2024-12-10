@@ -4,10 +4,12 @@ import { userSchema } from "./schemas/usersSchema";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import dotenv from 'dotenv';
+import { authenticatedRequest } from "../middlewares/auth";
+import { Episodes, WatchTimes } from "@prisma/client";
 dotenv.config();
 
 
-export const userController = {
+export const authController = {
 
     register: async (req: Request, res: Response) => {
         const body = userSchema.parse(req.body)
@@ -82,5 +84,6 @@ export const userController = {
                 return
             }
         }
-    }
+    },
+
 }

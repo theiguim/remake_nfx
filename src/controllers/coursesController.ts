@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../database";
 import { equal } from "assert";
+import { authenticatedRequest } from "../middlewares/auth";
 
 export const coursesController = {
 
@@ -52,11 +53,15 @@ export const coursesController = {
         }
     },
 
-    show: async (req: Request, res: Response) => {
+    show: async (req: authenticatedRequest, res: Response) => {
+
+        const userId = +req.user!.id
+        const courseId = +req.params.id
+
         try {
 
             const course = await prisma.courses.findUnique({
-                where: { id: +req.params.id },
+                where: { id: courseId },
                 select: {
                     id: true,
                     name: true,
@@ -76,7 +81,31 @@ export const coursesController = {
                 },
             })
 
-            res.json(course)
+            if (!course) {
+                res.status(404).json({ message: "Not found" })
+                return
+            }
+
+            // criar model separado
+            const liked = await prisma.likes.findUnique({
+                where: {
+                    userId_courseId: {
+                        userId,
+                        courseId
+                    }
+                }
+            });
+
+            const favorited = await prisma.favorites.findUnique({
+                where: {
+                    userId_courseId: {
+                        userId,
+                        courseId
+                    }
+                }
+            });
+
+            res.json({ ...course, liked: !!liked, favorited: !!favorited });
             return
 
         } catch (error) {
@@ -85,6 +114,44 @@ export const coursesController = {
             }
             return
         }
+    },
+
+    popular: async (req: Request, res: Response) => {
+
+        try {
+
+            const result = await prisma.courses.findMany({
+                select: {
+                    id: true,
+                    name: true,
+                    synopsis: true,
+                    thumbnailUrl: true,
+                    _count: {
+                        select: {
+                            likes: true
+                        }
+                    },
+                },
+                orderBy: {
+                    likes: {
+                        _count: "desc"
+                    }
+                },
+                take: 10
+            })
+            const formattedResults = result.map((course) => ({
+                ...course,
+                likes: course._count.likes,
+            }));
+
+            res.json(formattedResults);
+            return
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Erro ao buscar os top 10 cursos" });
+            return
+        }
+
     },
 
     search: async (req: Request, res: Response) => {
