@@ -56,6 +56,7 @@ export const episodeResourceFeatures: FeatureType[] = [
                 bucket: path.join(__dirname, "..", "..", "..", "uploads"), // Caminho para a pasta de uploads no servidor
                 opts: {
                     baseUrl: "/uploads", // URL base para acessar os arquivos carregados
+                    maxFileSize: 500 * 1024 * 1024 // 1000000000
                 },
             },
         },
